@@ -153,13 +153,13 @@ def create_model(session, forward_only, beam_search):
         else:
             print("Created model with fresh parameters.")
             session.run(tf.initialize_all_variables())
-            vec_post, vec_response = data_utils.get_data(FLAGS.data_dir, FLAGS.post_vocab_size, FLAGS.response_vocab_size)
-            initvec_post = tf.constant(vec_post, dtype=dtype, name='init_wordvector_post')
-            initvec_response = tf.constant(vec_response, dtype=dtype, name='init_wordvector_response')
-            embedding_post = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/RNN/EmbeddingWrapper/embedding:0'][0]
-            embedding_response = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/embedding_attention_decoder/embedding:0'][0]
-            session.run(embedding_post.assign(initvec_post))
-            session.run(embedding_response.assign(initvec_response))
+            # vec_post, vec_response = data_utils.get_data(FLAGS.data_dir, FLAGS.post_vocab_size, FLAGS.response_vocab_size)
+            # initvec_post = tf.constant(vec_post, dtype=dtype, name='init_wordvector_post')
+            # initvec_response = tf.constant(vec_response, dtype=dtype, name='init_wordvector_response')
+            # embedding_post = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/RNN/EmbeddingWrapper/embedding:0'][0]
+            # embedding_response = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/embedding_attention_decoder/embedding:0'][0]
+            # session.run(embedding_post.assign(initvec_post))
+            # session.run(embedding_response.assign(initvec_response))
         if FLAGS.use_ememory:
             vec_ememory = data_utils.get_ememory(FLAGS.data_dir, FLAGS.response_vocab_size)
             initvec_ememory = tf.constant(vec_ememory, dtype=dtype, name='init_ememory')
@@ -183,9 +183,9 @@ def train():
         # Read data into buckets and compute their sizes.
         print ("Reading development and training data (limit: %d)."
                      % FLAGS.max_train_data_size)
-        dev_set = read_data(dev_path)
+        dev_set = data_utils.read_data(dev_path)
         dev_set = refine_data(dev_set)
-        train_set = read_data(train_path, FLAGS.max_train_data_size)
+        train_set = data_utils.read_data(train_path, FLAGS.max_train_data_size)
         train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
         train_total_size = float(sum(train_bucket_sizes))
         print([len(x) for x in dev_set])
@@ -200,7 +200,7 @@ def train():
         # This is the training loop.
         step_time, loss = 0.0, 0.0
         current_step = 0
-        epoch_steps = 4400000 / FLAGS.batch_size
+        epoch_steps = 11118 / FLAGS.batch_size
         previous_losses = []
         while True:
             # Choose a bucket according to data distribution. We pick a random number
