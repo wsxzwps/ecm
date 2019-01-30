@@ -10,6 +10,8 @@ import json
 import tarfile
 import ConfigParser
 
+import pickle
+
 from six.moves import urllib
 
 from tensorflow.python.platform import gfile
@@ -236,3 +238,37 @@ def get_ememory(data_dir, response_vocabulary_size):
     return emem
     
 
+def read_data(path, max_size=None):
+    with open('wordDict', 'rb') as f:
+        word_dict = pickle.load(f)
+    with open('word2vec.npy', 'rb') as f:
+        wordvec = np.load(f)
+
+    data_set = [[] for _ in _buckets]
+    data = json.load(open(path,'r'))
+    counter = 0
+    size_max = 0
+    for pair in data:
+        post = pair[0][0].split(' ')
+        responses = pair[1]
+
+        source_ids = []
+        for i in range(len(post)):
+            source_ids.append(wordvec[word_dict[post[i]]])
+        # source_ids = [int(x) for x in post[0]]
+        for response in responses:
+            words = response[0].split(' ')
+            if not max_size or counter < max_size:
+                counter += 1
+                if counter % 100000 == 0:
+                    print("    reading data pair %d" % counter)
+                    sys.stdout.flush()
+                
+                target_ids = [wordvec[word_dict[x]] for x in words]
+                #size_max = len(source_ids) if len(source_ids) > size_max else size_max
+                #size_max = len(target_ids) if len(target_ids) > size_max else size_max
+                for bucket_id, (source_size, target_size) in enumerate(_buckets):
+                    if len(source_ids) < source_size and len(target_ids) < target_size:
+                        data_set[bucket_id].append([source_ids, target_ids, int(post[1]), int(response[1])])
+                        break
+    return data_set
