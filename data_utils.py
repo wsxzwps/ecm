@@ -269,6 +269,6 @@ def read_data(path, max_size=None):
                 #size_max = len(target_ids) if len(target_ids) > size_max else size_max
                 for bucket_id, (source_size, target_size) in enumerate(_buckets):
                     if len(source_ids) < source_size and len(target_ids) < target_size:
-                        data_set[bucket_id].append([source_ids, target_ids, int(post[1]), int(response[1])])
+                        data_set[bucket_id].append([source_ids, target_ids, int(pair[0][1]), int(response[0][1])])
                         break
     return data_set
