@@ -172,8 +172,9 @@ def train():
     print(FLAGS.__flags)
     # Prepare data.
     print("Preparing data in %s" % FLAGS.data_dir)
-    train_path, dev_path, test_path, _, _ = data_utils.prepare_data(
-            FLAGS.data_dir, FLAGS.post_vocab_size, FLAGS.response_vocab_size)
+
+    # train_path, dev_path, test_path, _, _ = data_utils.prepare_data(
+    #         FLAGS.data_dir, FLAGS.post_vocab_size, FLAGS.response_vocab_size)
 
     with tf.Session(config=sess_config) as sess:
         # Create model.
@@ -183,9 +184,9 @@ def train():
         # Read data into buckets and compute their sizes.
         print ("Reading development and training data (limit: %d)."
                      % FLAGS.max_train_data_size)
-        dev_set = data_utils.read_data(dev_path)
+        dev_set = data_utils.read_data("data/dialogues_test.txt")
         dev_set = refine_data(dev_set)
-        train_set = data_utils.read_data(train_path, FLAGS.max_train_data_size)
+        train_set = data_utils.read_data("data/dialogues_train.txt", FLAGS.max_train_data_size)
         train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
         train_total_size = float(sum(train_bucket_sizes))
         print([len(x) for x in dev_set])
