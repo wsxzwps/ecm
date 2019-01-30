@@ -45,7 +45,7 @@ GO_ID = 3
 _WORD_SPLIT = re.compile(b"([.,!?\"':;)(])")
 _DIGIT_RE = re.compile(br"\d")
 
-
+_buckets = [(12, 12), (16, 16), (20, 20), (30, 30)]
 
 def basic_tokenizer(sentence):
     """Very basic tokenizer: split the sentence into a list of tokens."""
