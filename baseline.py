@@ -184,9 +184,9 @@ def train():
         # Read data into buckets and compute their sizes.
         print ("Reading development and training data (limit: %d)."
                      % FLAGS.max_train_data_size)
-        dev_set = data_utils.read_data("data/dialogues_test.txt")
+        dev_set = data_utils.read_data("data/validation_json")
         dev_set = refine_data(dev_set)
-        train_set = data_utils.read_data("data/dialogues_train.txt", FLAGS.max_train_data_size)
+        train_set = data_utils.read_data("data/train_json", FLAGS.max_train_data_size)
         train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
         train_total_size = float(sum(train_bucket_sizes))
         print([len(x) for x in dev_set])
