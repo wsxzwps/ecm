@@ -36,10 +36,10 @@ _EOS = b"_EOS"
 _UNK = b"_UNK"
 _START_VOCAB = [_PAD, _UNK, _EOS, _GO]
 
-PAD_ID = 0
-UNK_ID = 1
-EOS_ID = 2
-GO_ID = 3
+PAD_ID = np.random.uniform(-1,1,100)
+# UNK_ID = 1
+# EOS_ID = 2
+GO_ID = np.random.uniform(-1,1,100)
 
 # Regular expressions used to tokenize.
 _WORD_SPLIT = re.compile(b"([.,!?\"':;)(])")
