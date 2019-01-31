@@ -240,7 +240,7 @@ def get_ememory(data_dir, response_vocabulary_size):
 
 def read_data(path, max_size=None):
     with open('wordDict', 'rb') as f:
-        word_dict = pickle.load(f,encoding='utf-8')
+        word_dict = pickle.load(f)
     with open('word2vec.npy', 'rb') as f:
         wordvec = np.load(f)
 
@@ -254,7 +254,10 @@ def read_data(path, max_size=None):
 
         source_ids = []
         for i in range(len(post)):
-            source_ids.append(wordvec[word_dict[post[i]]])
+            if post[i] in word_dict:
+                source_ids.append(wordvec[word_dict[post[i]]])
+            else:
+                source_ids.append(np.random.uniform(-1,1,100))
         # source_ids = [int(x) for x in post[0]]
         for response in responses:
             words = response[0].split(' ')
@@ -264,7 +267,13 @@ def read_data(path, max_size=None):
                     print("    reading data pair %d" % counter)
                     sys.stdout.flush()
                 
-                target_ids = [wordvec[word_dict[x]] for x in words]
+                target_ids = []
+                for word in words:
+                    if word in word_dict:
+                        target_ids.append(wordvec[word_dict[word]])
+                    else:
+                        target_ids.append(np.random.uniform(-1,1,100))
+
                 #size_max = len(source_ids) if len(source_ids) > size_max else size_max
                 #size_max = len(target_ids) if len(target_ids) > size_max else size_max
                 for bucket_id, (source_size, target_size) in enumerate(_buckets):
