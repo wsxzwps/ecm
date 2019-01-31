@@ -298,10 +298,10 @@ def decode():
             num_output = 5
 
             # Load vocabularies.
-            post_vocab_path = os.path.join(FLAGS.data_dir, config.get('data', 'post_vocab_file') % FLAGS.post_vocab_size)
-            response_vocab_path = os.path.join(FLAGS.data_dir, config.get('data', 'response_vocab_file') % FLAGS.response_vocab_size)
-            post_vocab, _ = data_utils.initialize_vocabulary(post_vocab_path)
-            _, rev_response_vocab = data_utils.initialize_vocabulary(response_vocab_path)
+            # post_vocab_path = os.path.join(FLAGS.data_dir, config.get('data', 'post_vocab_file') % FLAGS.post_vocab_size)
+            # response_vocab_path = os.path.join(FLAGS.data_dir, config.get('data', 'response_vocab_file') % FLAGS.response_vocab_size)
+            # post_vocab, _ = data_utils.initialize_vocabulary(post_vocab_path)
+            # _, rev_response_vocab = data_utils.initialize_vocabulary(response_vocab_path)
 
             # Decode from standard input.
             sys.stdout.write("> ")
