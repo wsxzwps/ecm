@@ -11,6 +11,7 @@ import tarfile
 import ConfigParser
 
 import pickle
+import io
 
 from six.moves import urllib
 
@@ -239,9 +240,9 @@ def get_ememory(data_dir, response_vocabulary_size):
     
 
 def read_data(path, max_size=None):
-    with open('wordDict', 'rb') as f:
+    with io.open('wordDict', 'rb', encoding='utf-8') as f:
         word_dict = pickle.load(f)
-    with open('word2vec.npy', 'rb') as f:
+    with open('word2vec.npy', 'rb', encoding='utf-8') as f:
         wordvec = np.load(f)
 
     data_set = [[] for _ in _buckets]
