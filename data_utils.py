@@ -36,10 +36,10 @@ _EOS = b"_EOS"
 _UNK = b"_UNK"
 _START_VOCAB = [_PAD, _UNK, _EOS, _GO]
 
-PAD_ID = np.random.uniform(-1,1,100)
-# UNK_ID = 1
-# EOS_ID = 2
-GO_ID = np.random.uniform(-1,1,100)
+PAD_ID = 0
+UNK_ID = 1
+GO_ID = 2
+EOS_ID = 3
 
 # Regular expressions used to tokenize.
 _WORD_SPLIT = re.compile(b"([.,!?\"':;)(])")
@@ -241,8 +241,8 @@ def get_ememory(data_dir, response_vocabulary_size):
 def read_data(path, max_size=None):
     with open('wordDict', 'rb') as f:
         word_dict = pickle.load(f)
-    with open('word2vec.npy', 'rb') as f:
-        wordvec = np.load(f)
+    # with open('word2vec.npy', 'rb') as f:
+    #     wordvec = np.load(f)
 
     data_set = [[] for _ in _buckets]
     data = json.load(open(path,'r'))
@@ -255,9 +255,10 @@ def read_data(path, max_size=None):
         source_ids = []
         for i in range(len(post)):
             if post[i] in word_dict:
-                source_ids.append(wordvec[word_dict[post[i]]])
+                source_ids.append(word_dict[post[i]])
             else:
-                source_ids.append(np.random.uniform(-1,1,100))
+                source_ids.append(UNK_ID)
+        source_ids.append(EOS_ID)
         # source_ids = [int(x) for x in post[0]]
         for response in responses:
             words = response[0].split(' ')
@@ -270,10 +271,10 @@ def read_data(path, max_size=None):
                 target_ids = []
                 for word in words:
                     if word in word_dict:
-                        target_ids.append(wordvec[word_dict[word]])
+                        target_ids.append(word_dict[word])
                     else:
-                        target_ids.append(np.random.uniform(-1,1,100))
-
+                        target_ids.append(UNK_ID)
+                target_ids.append(EOS_ID)
                 #size_max = len(source_ids) if len(source_ids) > size_max else size_max
                 #size_max = len(target_ids) if len(target_ids) > size_max else size_max
                 for bucket_id, (source_size, target_size) in enumerate(_buckets):

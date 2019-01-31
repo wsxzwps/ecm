@@ -153,13 +153,17 @@ def create_model(session, forward_only, beam_search):
         else:
             print("Created model with fresh parameters.")
             session.run(tf.initialize_all_variables())
-            # vec_post, vec_response = data_utils.get_data(FLAGS.data_dir, FLAGS.post_vocab_size, FLAGS.response_vocab_size)
-            # initvec_post = tf.constant(vec_post, dtype=dtype, name='init_wordvector_post')
-            # initvec_response = tf.constant(vec_response, dtype=dtype, name='init_wordvector_response')
-            # embedding_post = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/RNN/EmbeddingWrapper/embedding:0'][0]
-            # embedding_response = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/embedding_attention_decoder/embedding:0'][0]
-            # session.run(embedding_post.assign(initvec_post))
-            # session.run(embedding_response.assign(initvec_response))
+
+            with open('word2vec.npy', 'rb') as f:
+                wordvec = np.load(f)
+            vec_post = wordvec
+            vec_response = wordvec
+            initvec_post = tf.constant(vec_post, dtype=dtype, name='init_wordvector_post')
+            initvec_response = tf.constant(vec_response, dtype=dtype, name='init_wordvector_response')
+            embedding_post = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/RNN/EmbeddingWrapper/embedding:0'][0]
+            embedding_response = [x for x in tf.trainable_variables() if x.name == 'embedding_attention_seq2seq/embedding_attention_decoder/embedding:0'][0]
+            session.run(embedding_post.assign(initvec_post))
+            session.run(embedding_response.assign(initvec_response))
         if FLAGS.use_ememory:
             vec_ememory = data_utils.get_ememory(FLAGS.data_dir, FLAGS.response_vocab_size)
             initvec_ememory = tf.constant(vec_ememory, dtype=dtype, name='init_ememory')

@@ -278,7 +278,7 @@ class Seq2SeqModel(object):
                 # The corresponding target is decoder_input shifted by 1 forward.
                 if length_idx < decoder_size - 1:
                     target = decoder_inputs[batch_idx][length_idx + 1]
-                if length_idx == decoder_size - 1 or (target == data_utils.PAD_ID).all:
+                if length_idx == decoder_size - 1 or target == data_utils.PAD_ID:
                     batch_weight[batch_idx] = 0.0
             batch_weights.append(batch_weight)
         return batch_encoder_inputs, batch_decoder_inputs, batch_weights, batch_decoder_emotions
