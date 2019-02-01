@@ -237,9 +237,9 @@ def train():
                     sess.run(model.learning_rate_decay_op)
                 previous_losses.append(loss)
                 # Save checkpoint and zero timer and loss.
-                if current_step % (FLAGS.steps_per_checkpoint * 10) == 0 or current_step % 34000 == 0:
-                    checkpoint_path = os.path.join(FLAGS.train_dir, "translate.ckpt")
-                    model.saver.save(sess, checkpoint_path, global_step=model.global_step)
+                # if current_step % (FLAGS.steps_per_checkpoint * 10) == 0 or current_step % 34000 == 0:
+                #     checkpoint_path = os.path.join("checkpoints", "translate.ckpt")
+                #     model.saver.save(sess, checkpoint_path, global_step=model.global_step)
                 step_time, loss = 0.0, 0
                 #dev set evaluation
                 total_loss = .0
@@ -272,9 +272,11 @@ def train():
                     "inf")
                 print("    dev_set eval: bucket avg perplexity %.2f" % (total_ppx))
                 
-                if best_pplx == -1 or total_ppx < best_pplx:
-                    model.saver.save(sess, checkpoint_path, global_step=model.global_step)
-                    best_pplx = total_ppx
+                if current_step % (FLAGS.steps_per_checkpoint * 10) == 0 or current_step % 34000 == 0:
+                    if best_pplx == -1 or total_ppx < best_pplx:
+                        checkpoint_path = os.path.join("checkpoints", "translate.ckpt")
+                        model.saver.save(sess, checkpoint_path, global_step=model.global_step)
+                        best_pplx = total_ppx
 
                 sys.stdout.flush()
                 model.batch_size = FLAGS.batch_size
