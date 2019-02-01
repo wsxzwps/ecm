@@ -209,7 +209,7 @@ def train():
         previous_losses = []
 
         best_pplx = -1
-        for epoch in range(200):
+        while True:
             # Choose a bucket according to data distribution. We pick a random number
             # in [0, 1] and use the corresponding interval in train_buckets_scale.
             random_number_01 = np.random.random_sample()
