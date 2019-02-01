@@ -274,7 +274,7 @@ def train():
                 
                 if current_step % (FLAGS.steps_per_checkpoint * 10) == 0 or current_step % 34000 == 0:
                     if best_pplx == -1 or total_ppx < best_pplx:
-                        checkpoint_path = os.path.join("checkpoints", "translate.ckpt")
+                        checkpoint_path = os.path.join(FLAGS.train_dir, "translate.ckpt")
                         model.saver.save(sess, checkpoint_path, global_step=model.global_step)
                         best_pplx = total_ppx
 
