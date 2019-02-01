@@ -207,7 +207,9 @@ def train():
         current_step = 0
         epoch_steps = 11118 / FLAGS.batch_size
         previous_losses = []
-        while True:
+
+        best_pplx = -1
+        for epoch in range(200):
             # Choose a bucket according to data distribution. We pick a random number
             # in [0, 1] and use the corresponding interval in train_buckets_scale.
             random_number_01 = np.random.random_sample()
@@ -269,6 +271,11 @@ def train():
                 total_ppx = math.exp(total_loss) if total_loss < 300 else float(
                     "inf")
                 print("    dev_set eval: bucket avg perplexity %.2f" % (total_ppx))
+                
+                if best_pplx == -1 or total_ppx < best_pplx:
+                    model.saver.save(sess, checkpoint_path, global_step=model.global_step)
+                    best_pplx = total_ppx
+
                 sys.stdout.flush()
                 model.batch_size = FLAGS.batch_size
 
