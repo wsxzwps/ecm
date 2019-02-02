@@ -313,15 +313,21 @@ def decode():
             # _, rev_response_vocab = data_utils.initialize_vocabulary(response_vocab_path)
 
             # Decode from standard input.
-            sys.stdout.write("> ")
-            sys.stdout.flush()
-            sentence = sys.stdin.readline()
-            while sentence:
-                sentence = " ".join(split(sentence))
+            # sys.stdout.write("> ")
+            # sys.stdout.flush()
+            # sentence = sys.stdin.readline()
+
+            test_sentences = data_utils.read_test('data/test_json')
+
+            for sentence in test_sentences:
+                with open('result', 'a') as f:
+                    f.write(sentence)
+                    f.write('\n')
+                # sentence = " ".join(split(sentence))
                 # Get token-ids for the input sentence.
-                token_ids = data_utils.sentence_to_token_ids(sentence, post_vocab)
-                int2emotion = ['null', 'like', 'sad', 'disgust', 'angry', 'happy']
-                for decoder_emotion in range(1, 6):
+                token_ids = sentence
+                int2emotion = ['no emotion', 'anger', 'disgust', 'fear', 'happiness', 'sadness', 'surprise']
+                for decoder_emotion in range(1, 7):
                     bucket_id = min([b for b in xrange(len(_buckets))
                                                      if _buckets[b][0] > len(token_ids)])
                     # Get a 1-element batch to feed the sentence to the model.
@@ -361,7 +367,9 @@ def decode():
                         else:
                             res = nounk
                         for i in res[:num_output]:
-                            print(int2emotion[decoder_emotion]+': '+i[1])
+                            with open('result', 'a') as f:
+                                f.write(int2emotion[decoder_emotion]+': '+i[1])
+                                f.write('\n')
                     else:
 
                         # This is a greedy decoder - outputs are just argmaxes of output_logits.
@@ -370,10 +378,10 @@ def decode():
                         if data_utils.EOS_ID in outputs:
                             outputs = outputs[:outputs.index(data_utils.EOS_ID)]
                         # Print out response sentence corresponding to outputs.
-                        print(int2emotion[decoder_emotion]+': '+"".join([tf.compat.as_str(rev_response_vocab[output]) for output in outputs]))
-                print("> ", end="")
-                sys.stdout.flush()
-                sentence = sys.stdin.readline()
+                        with open('result', 'a') as f:
+                            f.write(int2emotion[decoder_emotion]+': '+"".join([tf.compat.as_str(rev_response_vocab[output]) for output in outputs]))
+                            f.write('\n')
+
 
 
 

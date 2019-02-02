@@ -282,3 +282,16 @@ def read_data(path, max_size=None):
                         data_set[bucket_id].append([source_ids, target_ids, int(pair[0][1]), int(response[1])])
                         break
     return data_set
+
+    def read_test(path):
+        data = json.load(open(path, 'r'))
+        for pair in data:
+            post = pair[0][0].split(' ')
+            source_ids = []
+            for i in range(len(post)):
+                if post[i] in word_dict:
+                    source_ids.append(word_dict[post[i]])
+                else:
+                    source_ids.append(UNK_ID)
+            source_ids.append(EOS_ID)
+        return source_ids
