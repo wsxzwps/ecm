@@ -68,7 +68,7 @@ FLAGS = tf.app.flags.FLAGS
 
 # We use a number of buckets and pad to the closest one for efficiency.
 # See seq2seq_model.Seq2SeqModel for details of how they work.
-_buckets = [(12, 12), (16, 16), (20, 20), (30, 30)]
+_buckets = [(12, 12), (16, 16), (20, 20), (30, 30), (50,50)]
 
 
 def read_data(path, max_size=None):
