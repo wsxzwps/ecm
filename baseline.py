@@ -11,6 +11,8 @@ import sys
 import time
 import json
 
+import pickle
+
 import numpy as np
 from six.moves import xrange    # pylint: disable=redefined-builtin
 import tensorflow as tf
@@ -317,11 +319,14 @@ def decode():
             # sys.stdout.flush()
             # sentence = sys.stdin.readline()
 
+            with open('rev_vocab', 'rb') as f:
+                rev_response_vocab = pickle.load(f)
+             
             test_sentences = data_utils.read_test('data/test_json')
 
             for sentence in test_sentences:
                 with open('result', 'a') as f:
-                    f.write(' '.join(sentence))
+                    f.write(' '.join([rev_response_vocab[id] for id in sentence]))
                     f.write('\n')
                 # sentence = " ".join(split(sentence))
                 # Get token-ids for the input sentence.

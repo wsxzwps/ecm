@@ -1,8 +1,8 @@
 [data]
 category = 6 
-raw_train_file = train
+raw_train_file = dialogues_train.txt
 train_file = weibo.train.refine.tokenids
-raw_dev_file = dev
+raw_dev_file = dialogues_validation.txt
 dev_file = weibo.dev.refine.tokenids
 test_file = weibo.test.refine.tokenids
 post_vocab_file = vocab%d.post
