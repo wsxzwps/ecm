@@ -236,7 +236,7 @@ class Seq2SeqModel(object):
 
         # Get a random batch of encoder and decoder inputs from data,
         # pad them if needed, reverse encoder inputs and add GO to decoder.
-        _emotion = np.random.randint(6)
+        _emotion = np.random.randint(7)
 
         for _ in xrange(self.batch_size):
             decoder_emotion = -1
@@ -246,6 +246,8 @@ class Seq2SeqModel(object):
             # Encoder inputs are padded and then reversed.
             encoder_pad = [data_utils.PAD_ID] * (encoder_size - len(encoder_input))
             encoder_inputs.append(list(reversed(encoder_input + encoder_pad)))
+
+            # encoder_inputs.append(reversed(encoder_input + encoder_pad))
 
             # Decoder inputs get an extra "GO" symbol, and are padded then.
             decoder_pad_size = decoder_size - len(decoder_input) - 1

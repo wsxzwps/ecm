@@ -388,7 +388,7 @@ def decode():
                             outputs = outputs[:outputs.index(data_utils.EOS_ID)]
                         # Print out response sentence corresponding to outputs.
                         with open('result', 'a') as f:
-                            f.write(' '.join(int2emotion[decoder_emotion]+': '+"".join([tf.compat.as_str(rev_response_vocab[output]) for output in outputs])))
+                            f.write(' '.join(int2emotion[decoder_emotion]+': '+' '.join([tf.compat.as_str(rev_response_vocab[output]) for output in outputs])))
                             f.write('\n')
 
 
