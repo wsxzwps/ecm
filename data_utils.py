@@ -287,6 +287,7 @@ def read_test(path):
     with open('wordDict', 'rb') as f:
         word_dict = pickle.load(f)
     data = json.load(open(path, 'r'))
+    data_set = []
     for pair in data:
         post = pair[0][0].split(' ')
         source_ids = []
@@ -296,4 +297,5 @@ def read_test(path):
             else:
                 source_ids.append(UNK_ID)
         source_ids.append(EOS_ID)
-    return source_ids
+        data_set.append(source_ids)
+    return data_set
