@@ -68,7 +68,7 @@ FLAGS = tf.app.flags.FLAGS
 
 # We use a number of buckets and pad to the closest one for efficiency.
 # See seq2seq_model.Seq2SeqModel for details of how they work.
-_buckets = [(12, 12), (16, 16), (20, 20), (30, 30), (50,50)]
+_buckets = [(12, 12), (16, 16), (20, 20), (30, 30)]
 
 
 def read_data(path, max_size=None):
@@ -331,10 +331,14 @@ def decode():
                 # sentence = " ".join(split(sentence))
                 # Get token-ids for the input sentence.
                 token_ids = sentence
+                buckets = [b for b in xrange(len(_buckets)) if _buckets[b][0] > len(token_ids)]
+                if len(buckets) == 0:
+                    continue
+                bucket_id = min(buckets)
                 int2emotion = ['no emotion', 'anger', 'disgust', 'fear', 'happiness', 'sadness', 'surprise']
                 for decoder_emotion in range(1, 7):
-                    bucket_id = min([b for b in xrange(len(_buckets))
-                                                     if _buckets[b][0] > len(token_ids)])
+                    # bucket_id = min([b for b in xrange(len(_buckets))
+                    #                                  if _buckets[b][0] > len(token_ids)])
                     # Get a 1-element batch to feed the sentence to the model.
                     encoder_inputs, decoder_inputs, target_weights, decoder_emotions = model.get_batch_data(
                             [[token_ids, [], 0, decoder_emotion]], bucket_id)
