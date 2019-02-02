@@ -284,6 +284,8 @@ def read_data(path, max_size=None):
     return data_set
 
 def read_test(path):
+    with open('wordDict', 'rb') as f:
+        word_dict = pickle.load(f)
     data = json.load(open(path, 'r'))
     for pair in data:
         post = pair[0][0].split(' ')
